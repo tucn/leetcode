@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Status: In Progress
+// Status: WIP
 func main() {
 	fmt.Println(maximumTime("2?:?0"))
 }
