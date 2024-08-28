@@ -5,9 +5,11 @@ import (
 	"strings"
 )
 
-// Status: WIP
 func main() {
 	fmt.Println(maximumTime("2?:?0"))
+	fmt.Println(maximumTime("0?:2?"))
+	fmt.Println(maximumTime("??:??"))
+	fmt.Println(maximumTime("?9:?7"))
 }
 func maximumTime(time string) string {
 	for i := range time {
@@ -17,11 +19,17 @@ func maximumTime(time string) string {
 		switch i {
 		// 1st hour
 		case 0:
-			// both are unknown, maximum is 2 to get the
-			// next one as
 			if time[i+1] == '?' {
 				time = replaceAtIndex(time, '2', i)
+				continue
 			}
+			// cannot be 24 or more
+			if time[i+1] > '3' {
+				time = replaceAtIndex(time, '1', i)
+				continue
+			}
+			time = replaceAtIndex(time, '2', i)
+			continue
 		// 1st min
 		case 1:
 			if time[i-1] == '?' || time[i-1] == '2' {
