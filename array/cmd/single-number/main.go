@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-// @WIP
 func main() {
 	test1 := []int{1, 1, 2, 3, 4, 4, 3}
 	fmt.Printf("%v", xor(test1)) // expect 2
