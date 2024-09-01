@@ -25,3 +25,28 @@ Hint: if we don't need the input arrays, just use original array as M
 - Finding middle node of a given linked list
 **How**
 - Moving two pointer at different speed
+
+3. Linked List In-Place Reversal
+**When**: Rearrange the links between nodes in a linked list (Reverse a linked list, swap nodes)
+**How**:
+- Using three pointers (prev, current, next)
+
+4. Monotonic Stack
+**What**: Monotonic Stack maintaining elements in either increasing or decreasing order. 
+**When**: Using stack to find the next `Greater` or `Smaller` element in an array
+**How**:
+- Initialize an empty stack.
+- Iterate through the elements and for each element:
+    while stack is not empty AND top of stack is more than the current element
+        - Pop element from the stack
+    Push the current element onto the stack.
+- At the end of the iteration, the stack will contain the monotonic increasing order of elements.
+
+5. Top `K` element
+**When**: Find `K largest/smallest/most frequent` elements in the dataset. Normal shorting take O(nlogn)
+**How**: Using `Min heap`
+- Using a heap of K elements.
+- For each element, compare it with the root of the heap.
+- If the element is greater than the root, replace the root with the element.
+
+6. Overlapping Intervals
