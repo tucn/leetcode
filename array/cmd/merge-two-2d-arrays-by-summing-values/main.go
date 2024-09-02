@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-// @WIP
 func main() {
 	//nums1 = [[1,2],[2,3],[4,5]], nums2 = [[1,4],[3,2],[4,1]]
 	nums1 := [][]int{
@@ -24,37 +23,36 @@ func main() {
 // => no duplicated ids and can be iterated in order
 //
 // output[dup_id] = sum(nums1[dup_id], nums2[dup_id])
-// Return the resulting array. The returned array must be sorted in ascending order by id.
+// Return the outulting array. The returned array must be sorted in ascending order by id.
 func mergeArrays(nums1 [][]int, nums2 [][]int) [][]int {
-	// don't need to check for empty arrays based on the constraints
-	out := make([][]int, 0)
-
-	// should iterate based on the longest array
-	// swap the arrays if nums1 is longer
-	if len(nums1) > len(nums2) {
-		nums1, nums2 = nums2, nums1
-	}
-	mapOut := make(map[int]int, len(nums1))
-	i := 0
-	for i < len(nums1) {
-		id1 := nums1[i][0]
-		val1 := nums1[i][1]
-		id2 := nums2[i][0]
-		val2 := nums2[i][1]
-		if id1 > len(mapOut) {
-			mapOut[id1] += val1
-		}
-		if id2 > len(mapOut) {
-			mapOut[id2] += val2
-		}
-		if len(nums1) == len(mapOut) {
+	var out [][]int
+	// two pointers to iterate over nums1 and nums2
+	for i, j := 0, 0; i < len(nums1) || j < len(nums2); {
+		// if one of the arrays is exhausted, append the out of the other array
+		if i == len(nums1) && j < len(nums2) {
+			out = append(out, nums2[j:]...)
 			break
 		}
-		i++
-	}
-	// convert map to array
-	for k, v := range mapOut {
-		out = append(out, []int{k, v})
+		if j == len(nums2) && i < len(nums1) {
+			out = append(out, nums1[i:]...)
+			break
+		}
+		// if the ids are the same, add the sum of the values
+		if nums1[i][0] == nums2[j][0] {
+			out = append(out, []int{nums1[i][0], nums1[i][1] + nums2[j][1]})
+			i++
+			j++
+			continue
+		}
+		// if nums1[i][0] < nums2[j][0], append nums1[i]
+		if nums1[i][0] < nums2[j][0] {
+			out = append(out, nums1[i])
+			i++
+			continue
+		}
+		// if nums1[i][0] > nums2[j][0], append nums2[j]
+		out = append(out, nums2[j])
+		j++
 	}
 	return out
 }
