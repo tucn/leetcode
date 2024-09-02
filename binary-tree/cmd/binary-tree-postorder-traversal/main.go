@@ -46,9 +46,9 @@ func main() {
 	}
 	// [4 5 2 6 3 1]
 	fmt.Println(postOrderTraversal(test2))
-	// fmt.Println("Without Recursive")
-	// fmt.Println(postOrderTraversalWR(test1))
-	// fmt.Println(postOrderTraversalWR(test2))
+	fmt.Println("Without Recursive")
+	fmt.Println(postOrderTraversalWR(test1))
+	fmt.Println(postOrderTraversalWR(test2))
 
 }
 
@@ -87,7 +87,22 @@ func postOrderTraversal(root *TreeNode) []int {
 //	c. If "temp" does not have a left child or the left child is already visited, and "temp" does not have a right child or the right child is already visited, then print the data of "temp", insert "temp" into "visited" set, and set "temp" to the head of the tree.
 //
 // Define a function called "newNode" which takes an integer data as input and returns a new Node with the given data, NULL left pointer, and NULL right pointer.
-// @Todo
 func postOrderTraversalWR(root *TreeNode) []int {
-	return nil
+	out := make([]int, 0)
+	temp := root
+	visited := make(map[*TreeNode]bool)
+	for temp != nil && !visited[temp] {
+		if temp.Left != nil && !visited[temp.Left] {
+			temp = temp.Left
+			continue
+		}
+		if temp.Right != nil && !visited[temp.Right] {
+			temp = temp.Right
+			continue
+		}
+		out = append(out, temp.Val)
+		visited[temp] = true
+		temp = root
+	}
+	return out
 }
