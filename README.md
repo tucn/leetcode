@@ -50,3 +50,16 @@ Hint: if we don't need the input arrays, just use original array as M
 - If the element is greater than the root, replace the root with the element.
 
 6. Overlapping Intervals
+
+7. Reverse integer
+**When**: Reverse a 32-bit signed integer.
+**How**:
+- Using mod and divide
+```
+reversed := 0 
+x := input
+while x != 0 {
+    reversed = reversed * 10 + x%10
+    x = x/10
+}
+```
