@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 // @WIP
@@ -14,27 +15,25 @@ func getLucky(s string, k int) int {
 	convertedStr := convert(s)
 	out := 0
 	for i := 0; i < k; i++ {
-		out += transform(convertedStr)
+		out = transform(convertedStr)
+		convertedStr = strconv.Itoa(out)
 	}
 	return out
 }
 
-func convert(s string) int {
-	out := 0
+func convert(s string) string {
+	out := ""
 	for _, c := range s {
-		out += int(c - '0')
+		out += strconv.Itoa(int(c - 'a' + 1))
 	}
 	return out
 }
 
-func transform(value int) int {
+func transform(value string) int {
 	out := 0
-	for {
-		if value == 0 {
-			break
-		}
-		out += value % 10
-		value /= 10
+	for _, c := range value {
+		num, _ := strconv.Atoi(string(c))
+		out += num
 	}
 	return out
 }
