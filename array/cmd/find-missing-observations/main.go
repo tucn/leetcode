@@ -13,9 +13,9 @@ func main() {
 // The time complexity and space complexity will depending on the input n
 func missingRolls(rolls []int, mean int, n int) []int {
 	out := make([]int, 0)
-	divider := len(rolls) + n
+	totalSum := (len(rolls) + n) * mean
 	// Collect total
-	currentTotal := 0
+	totalRolls := 0
 	for _, v := range rolls {
 		if mean == 6 && v < 6 {
 			// There is no way you can make the means of 6
@@ -23,57 +23,29 @@ func missingRolls(rolls []int, mean int, n int) []int {
 			// 6
 			return out
 		}
-		currentTotal += v
+		totalRolls += v
 	}
-	nRollsSum := n * 6
-	found := 0
-	// Should be start from n since there is no way we can have a 0 roll
-	for i := n; i <= nRollsSum; i++ {
-		total := currentTotal + i
-		if total/divider == mean {
-			fmt.Printf("Found: %d\n", i)
-			found = i
-			break
-		}
+	shouldFill := totalSum - totalRolls
+	// shouldFill should not less then n
+	if shouldFill < n {
+		return out
 	}
-	// Return blank if not found
-	if found == 0 {
-		return []int{}
+	// shouldFill should not greater than 6 * n
+	if shouldFill > 6*n {
+		return out
 	}
-	// found, just split all values with n
-	remainer := found % n
-	// if remainer > 6, we have to split the remainder through 6 or more random of n
-	// make sure that after we split, each of the div is still smaller than 7
-	div := found / n
-	extra := 0
-	count := 0
-	if remainer > 6 {
-		for {
-			extra = remainer / 6
-			fmt.Printf("Remainer: %v, Extra: %v\n", remainer, extra)
-			count += 6
-			if extra < 6 {
-				count += extra
-				break
-			}
-		}
-	}
-	maximumPlus := count / n
-	if div+maximumPlus > 6 {
-		return []int{}
-	}
-	for range n {
-		if count == 0 {
-			out = append(out, div)
-			continue
-		}
-		if maximumPlus == 0 {
-			out = append(out, div+1)
-			count -= 1
-			continue
-		}
-		out = append(out, div+maximumPlus)
-		count -= maximumPlus
+	// Generate the Missing Rolls:
+	// Go backward to make sure the last element is the largest
+	for i := n - 1; i > 0; i-- {
+		// For example:
+		// - We are assigning the value to result[0].
+		// - There are i = 2 rolls left after this one.
+		// - The formula becomes: min(6, 15 - 2) = min(6, 13) = 6.
+		// - We assign 6 to result[0] and reduce missingSum to 15 - 6 = 9.
+		fillin := min(6, shouldFill-i)
+
+		out = append(out, fillin)
+		shouldFill -= fillin
 	}
 	return out
 }
