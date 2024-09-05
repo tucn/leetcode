@@ -36,7 +36,7 @@ func missingRolls(rolls []int, mean int, n int) []int {
 	}
 	// Generate the Missing Rolls:
 	// Go backward to make sure the last element is the largest
-	for i := n - 1; i > 0; i-- {
+	for i := n - 1; i >= 0; i-- {
 		// For example:
 		// - We are assigning the value to result[0].
 		// - There are i = 2 rolls left after this one.
