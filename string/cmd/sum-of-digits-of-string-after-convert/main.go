@@ -5,7 +5,6 @@ import (
 	"strconv"
 )
 
-// @WIP
 func main() {
 	fmt.Printf("%d\n", getLucky("iiii", 1))
 	fmt.Printf("%d\n", getLucky("leetcode", 2))
