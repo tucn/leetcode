@@ -6,49 +6,74 @@ func main() {
 	fmt.Printf("%v\n", missingRolls([]int{3, 2, 4, 3}, 4, 2))
 	fmt.Printf("%v\n", missingRolls([]int{1, 5, 6}, 3, 4))
 	fmt.Printf("%v\n", missingRolls([]int{1, 2, 3, 4}, 6, 4))
+	fmt.Printf("%v\n", missingRolls([]int{4, 5, 6, 2, 3, 6, 5, 4, 6, 4, 5, 1, 6, 3, 1, 4, 5, 5, 3, 2, 3, 5, 3, 2, 1, 5, 4, 3, 5, 1, 5}, 4, 40))
 }
 
-// @WIP
 // Find missing rolls so that the mean of the total rolls is equal to the given mean.
 // The time complexity and space complexity will depending on the input n
 func missingRolls(rolls []int, mean int, n int) []int {
-	out := make([]int, n)
-	// firstly, we check the mod of current out with means
-	// if it is 0 then we just add means to the out or add some number that mod means to 0
-	// For example if the [4,4,4,4] means 4 and n = 1 -> [4,4,4,4,4] -> [4,4,4,4,4] / 5 = 4
-	// Another example: [3,2,4,3] means 4 and n = 2 -> 3+2+4+3 = 12 % 4 = 0 -> add double 4 or 6
-
-	// if it is not 0 then we need to add the next n so that the mod is 0
-	// Another example: [3,2,4,1] means 4 and n = 2 -> 3+2+4+1 = 10 % 4
-	// = 2 -> next should be means - 2 + means = 6 -> [3,2,4,1,6] and then 4 -> [3,2,4,1,6,4] = 16 % 4 = 0
-	//
-	// Now, if the means - mod + means > 6 ? then we need to depends on the next n
-	// to maximize the change, we add 6
-	//
-	// and then for the other we add means to the out
-	total := 0
-	for _, val := range rolls {
-		total += val
-	}
-
-	// mod not equal 0
-	div := mean
-	for i := 0; i < n; i++ {
-		mod := total % div
-		if mod == 0 {
-			for j := 0; j < n-i; j++ {
-				out[j] = mean
-			}
+	out := make([]int, 0)
+	divider := len(rolls) + n
+	// Collect total
+	currentTotal := 0
+	for _, v := range rolls {
+		if mean == 6 && v < 6 {
+			// There is no way you can make the means of 6
+			// if there is one of the current element less than
+			// 6
 			return out
 		}
-		need := (mean - mod) + mean
-		if need > 6 {
-			total += 6
-		} else {
-			total += need
-		}
-		div += 1
+		currentTotal += v
 	}
-
-	return []int{}
+	nRollsSum := n * 6
+	found := 0
+	// Should be start from n since there is no way we can have a 0 roll
+	for i := n; i <= nRollsSum; i++ {
+		total := currentTotal + i
+		if total/divider == mean {
+			fmt.Printf("Found: %d\n", i)
+			found = i
+			break
+		}
+	}
+	// Return blank if not found
+	if found == 0 {
+		return []int{}
+	}
+	// found, just split all values with n
+	remainer := found % n
+	// if remainer > 6, we have to split the remainder through 6 or more random of n
+	// make sure that after we split, each of the div is still smaller than 7
+	div := found / n
+	extra := 0
+	count := 0
+	if remainer > 6 {
+		for {
+			extra = remainer / 6
+			fmt.Printf("Remainer: %v, Extra: %v\n", remainer, extra)
+			count += 6
+			if extra < 6 {
+				count += extra
+				break
+			}
+		}
+	}
+	maximumPlus := count / n
+	if div+maximumPlus > 6 {
+		return []int{}
+	}
+	for range n {
+		if count == 0 {
+			out = append(out, div)
+			continue
+		}
+		if maximumPlus == 0 {
+			out = append(out, div+1)
+			count -= 1
+			continue
+		}
+		out = append(out, div+maximumPlus)
+		count -= maximumPlus
+	}
+	return out
 }
