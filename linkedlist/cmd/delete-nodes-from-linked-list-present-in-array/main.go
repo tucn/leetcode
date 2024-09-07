@@ -37,7 +37,8 @@ func modifiedList(nums []int, head *ListNode) *ListNode {
 	// The best way is to update the head it self
 	// since max of n is 10^5, we can use numMap := [100001]bool{}
 	// (reference from one of the solutions)
-	numMap := [100001]bool{}
+	numMap := map[int]bool{}
+	// numMap := [100001]bool{}
 	for _, i := range nums {
 		numMap[i] = true
 	}
