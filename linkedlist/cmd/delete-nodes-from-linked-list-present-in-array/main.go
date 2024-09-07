@@ -35,35 +35,23 @@ func main() {
 
 func modifiedList(nums []int, head *ListNode) *ListNode {
 	// The best way is to update the head it self
-	numMap := make(map[int]int, 0)
+	// since max of n is 10^5, we can use numMap := [100001]bool{}
+	// (reference from one of the solutions)
+	numMap := [100001]bool{}
 	for _, i := range nums {
-		numMap[i] = 0
+		numMap[i] = true
 	}
-	// The logic is as follows:
-	// - root is a pointer to head that contain very first value
-	// - if the head.Val include in nums, then we need to point the root.Next to the next node
-	// - For example: [1,2,3,2] with nums = [2]
-	//       - rootnode = pointer to node1
-	//       - repeat
-	//       	- check rootnode.Next to see if they in nums, since node2 value is 2, change the rootnode.Next to node2.Next
-	//          - if rootnode.Next is nil return root
-	//          - else rootnode = pointer to rootnode.Next
 	rootpointer := &ListNode{
 		Val:  -1,
 		Next: head,
 	}
-	nextpointer := head
-	for {
-		if nextpointer == nil {
-			return head
+	current := rootpointer
+	for current.Next != nil {
+		if numMap[current.Next.Val] {
+			current.Next = current.Next.Next
+		} else {
+			current = current.Next
 		}
-		if _, ok := numMap[nextpointer.Val]; ok {
-			nextpointer = nextpointer.Next
-			continue
-		}
-
-		rootpointer.Next = nextpointer
-		nextpointer = nextpointer.Next
 	}
-	return head
+	return rootpointer.Next
 }
