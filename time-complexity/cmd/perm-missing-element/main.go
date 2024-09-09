@@ -11,7 +11,6 @@ func main() {
 
 func Solution(A []int) int {
 	sort.Ints(A)
-	// What if the missing number is the last one?
 	for i := 0; i < len(A); i++ {
 		if A[i] != i+1 {
 			return i + 1
