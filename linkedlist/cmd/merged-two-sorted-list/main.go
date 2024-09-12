@@ -28,6 +28,11 @@ func main() {
 	fmt.Printf("%v\n", mergeTwoLists(list1, list2))
 }
 
+// Simple logic: O(m+n)
+// - Create new output to get the merged value
+// - If both nil, return
+// - If both not nil, add the smaller value to output first, increase the node of smaller list, increase current pointer
+// - If one is nil, add the other to output, increase the other node, increase current pointer
 func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	if list1 == nil && list2 != nil {
 		return list2
@@ -43,17 +48,13 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	// create current node
 	cur := root
 	for list1 != nil || list2 != nil {
-		if list1.Val < list2.Val || list2 == nil {
+		if (list1 != nil && list2 != nil && list1.Val <= list2.Val) || list2 == nil {
 			cur.Next = list1
 			list1 = list1.Next
-			continue
-		}
-		if list1 == nil {
+		} else if list2 != nil {
 			cur.Next = list2
 			list2 = list2.Next
-			continue
 		}
-		// list2.Val > list1.Val
 		cur = cur.Next
 	}
 	return root.Next
